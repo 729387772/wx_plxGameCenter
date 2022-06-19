@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.gao.game.common.dao.GameInfoDao">
+    <insert id="saveGameInfo" parameterType="priv.gao.game.common.bean.GameInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO GAME_INFO(GAME_TYPE,RULES)
+        VALUE (#{gameType},#{rules})
+    </insert>
+</mapper>

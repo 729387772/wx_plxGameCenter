@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.gao.user.dao.UserDao">
+
+    <insert id="regist" parameterType="priv.gao.user.bean.User">
+        INSERT INTO USER(USER_CODE,USER_NAME,PASSWORD,QQ,WECHAT,ID_CARD,TELEPHONE,CREATE_TIME,STATUS)
+        VALUE (#{userCode},#{userName},#{password},#{qq},#{wechat},#{idCard},#{telephone},#{createTime},#{status})
+    </insert>
+
+    <resultMap id="userResultMap" type="priv.gao.user.bean.User">
+        <result column="ID" property="id"></result>
+        <result column="USER_CODE" property="userCode"></result>
+        <result column="USER_NAME" property="userName"></result>
+        <result column="PASSWORD" property="password"></result>
+        <result column="QQ" property="qq"></result>
+        <result column="WECHAT" property="wechat"></result>
+        <result column="ID_CARD" property="idCard"></result>
+        <result column="TELEPHONE" property="telephone"></result>
+        <result column="CREATE_TIME" property="createTime"></result>
+        <result column="STATUS" property="status"></result>
+    </resultMap>
+
+    <select id="login" parameterType="priv.gao.user.bean.User" resultMap="userResultMap">
+        SELECT *
+        FROM USER
+        WHERE USER_CODE = #{userCode}
+          AND PASSWORD = #{password}
+    </select>
+
+</mapper>

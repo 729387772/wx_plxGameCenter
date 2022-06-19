@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.gao.room.dao.RoomDao">
+
+    <insert id="saveRoomInfo" parameterType="priv.gao.room.bean.Room">
+        INSERT INTO ROOM(ROOM_CODE,ROOM_NAME,PASSWORD,ROOM_MASTER_CODE,MAX_USER_NUMBER,FULL_USER_START,STATUS,GAME_INFO_ID)
+                VALUE (NEXTVAL('ROOM_CODE'),#{roomName},#{password},#{roomMasterCode},#{maxUserNumber},#{fullUserStart},#{status},#{gameInfoId})
+        <selectKey keyProperty="roomCode" order="AFTER" resultType="Integer">
+            SELECT CURRVAL('ROOM_CODE') FROM DUAL
+        </selectKey>
+    </insert>
+
+    <delete id="deleteRoomByRoomCode" parameterType="Integer">
+        DELETE FROM ROOM
+        WHERE ROOM_CODE = #{roomCode}
+    </delete>
+
+    <update id="updateRoomInfo">
+        UPDATE ROOM
+        SET ROOM_MASTER_CODE = #{roomMasterCode},
+        STATUS = #{status}
+        WHERE ROOM_CODE = #{roomCode}
+    </update>
+
+    <resultMap id="roomResultMap" type="priv.gao.room.bean.Room">
+        <result column="ID" property="id"></result>
+        <result column="ROOM_CODE" property="roomCode"></result>
+        <result column="ROOM_NAME" property="roomName"></result>
+        <result column="PASSWORD" property="password"></result>
+        <result column="ROOM_MASTER_CODE" property="roomMasterCode"></result>
+        <result column="MAX_USER_NUMBER" property="maxUserNumber"></result>
+        <result column="FULL_USER_START" property="fullUserStart"></result>
+        <result column="STATUS" property="status"></result>
+        <result column="GAME_INFO_ID" property="gameInfoId"></result>
+        <association property="gameInfo" javaType="priv.gao.game.common.bean.GameInfo">
+            <result column="GAME_INFO_ID" property="id"></result>
+            <result column="GAME_TYPE" property="gameType"></result>
+            <result column="RULES" property="rules"></result>
+        </association>
+    </resultMap>
+    <select id="queryRoomInfo" parameterType="Integer" resultMap="roomResultMap">
+        SELECT * FROM ROOM R,GAME_INFO G WHERE R.GAME_INFO_ID = G.ID AND R.ROOM_CODE = #{roomCode}
+    </select>
+</mapper>

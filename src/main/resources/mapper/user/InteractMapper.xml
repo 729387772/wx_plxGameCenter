@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.gao.user.dao.InteractDao">
+
+    <insert id="insertUserRelation" parameterType="priv.gao.user.bean.UserRelation">
+        INSERT INTO USER_RELATION(USER_CODE,FRIEND_CODE,CREATE_TIME,BLACKLIST_TIME,STATUS)
+        VALUE (#{userCode},#{friendCode},#{createTime},#{blacklistTime},#{status})
+    </insert>
+
+    <update id="updateUserRelation" parameterType="priv.gao.user.bean.UserRelation">
+        UPDATE USER_RELATION SET
+        <if test="createTime!=null">
+            CREATE_TIME = #{createTime},
+        </if>
+        <if test="blacklistTime!=null">
+            BLACKLIST_TIME = #{blacklistTime},
+        </if>
+            STATUS = #{status}
+        WHERE USER_CODE = #{userCode}
+          AND FRIEND_CODE = #{friendCode}
+    </update>
+
+    <delete id="deleteUserRelation" parameterType="priv.gao.user.bean.UserRelation">
+        DELETE FROM USER_RELATION
+        WHERE USER_CODE = #{userCode}
+          AND FRIEND_CODE = #{friendCode};
+
+        DELETE FROM USER_RELATION
+        WHERE USER_CODE = #{friendCode}
+          AND FRIEND_CODE = #{userCode};
+    </delete>
+
+    <select id="queryUserRelationByUserCode" parameterType="string" resultType="priv.gao.user.bean.UserRelation">
+        SELECT *
+        FROM USER_RELATION
+        WHERE USER_CODE = #{userCode}
+    </select>
+
+    <select id="queryApplyListByUserCode" parameterType="string" resultType="priv.gao.user.bean.User">
+        SELECT U.USER_CODE,U.USER_NAME,U.QQ,U.WECHAT
+        FROM USER_RELATION R,USER U
+        WHERE R.USER_CODE = U.USER_CODE
+          AND FRIEND_CODE = #{userCode}
+          AND R.STATUS = '00'
+    </select>
+
+</mapper>

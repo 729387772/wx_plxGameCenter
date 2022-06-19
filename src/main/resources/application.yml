@@ -14,4 +14,16 @@ spring:
       prefix: /
 
 mybatis:
-  mapper-locations: classpath*:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*/*Mapper.xml
+  type-aliases-package: priv.gao
+  configuration:
+    map-underscore-to-camel-case: true
+
+#配置日志
+logging:
+  #此处存放日志的路径
+  path:
+    config: classpath:logback-spring.xml
+  #指定不同目录下的日志的级别
+  level:
+    mapper: DEBUG
